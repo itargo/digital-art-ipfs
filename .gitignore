@@ -1,0 +1,13 @@
+.vscode
+.tags
+*.swo
+*.swp
+.idea
+
+# log
+*.log
+*.log.*
+
+# ipfs data
+data/*
+!data/.gitkeep
