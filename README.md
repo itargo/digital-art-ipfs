@@ -1,9 +1,14 @@
 # Digital Art IPFS server
-// local
+// local에서 실행
+```bash
 $ docker-compose up
-// production
+```
+// production에서 실행
+우선 .env에 환경변수들 설정하고
+```bash
 $ source .env
 $ docker-compose -f docker-compose.production.yml up
+```
 
 ### Trouble shooting
 * error posting to IPFS:Post "http://172.20.0.2:5001/api/v0/pin/ls?type=recursive": dial tcp 172.20.0.2:5001: connect: connection refused
