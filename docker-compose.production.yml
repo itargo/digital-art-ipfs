@@ -11,14 +11,13 @@ services:
       - "9090:9090"
     depends_on:
       - cluster0
-      - cluster1
   
   # cluster peer0
   ipfs0:
     build: .
     container_name: ipfs0
     environment:
-      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME_1}
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       IPFS_PROFILE: server
@@ -49,35 +48,3 @@ services:
           # - "9096:9096" # Cluster IPFS Proxy endpoint
     volumes:
       - ./data/cluster0:/data/ipfs-cluster
-
-  # cluster peer1
-  ipfs1:
-    build: .
-    container_name: ipfs1
-    environment:
-      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME_2}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      IPFS_PROFILE: server
-    ports:
-      - "8082:8080" # ipfs gateway
-    volumes:
-      - ./data/ipfs1:/data/ipfs
-      - ./plugins:/data/ipfs/plugins
-
-  cluster1:
-    container_name: cluster1
-    image: ipfs/ipfs-cluster:v0.12.0
-    depends_on:
-      - ipfs1
-    environment:
-      CLUSTER_PEERNAME: cluster1
-      CLUSTER_SECRET: ${CLUSTER_SECRET}
-      CLUSTER_CRDT_TRUSTEDPEERS: '*'
-      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs1/tcp/5001
-      CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
-      CLUSTER_MONITORPINGINTERVAL: 2s
-    ports:
-          - "127.0.0.1:9095:9094"
-    volumes:
-      - ./data/cluster1:/data/ipfs-cluster
