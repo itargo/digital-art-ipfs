@@ -3,6 +3,7 @@
 *.swo
 *.swp
 .idea
+.env
 
 # log
 *.log

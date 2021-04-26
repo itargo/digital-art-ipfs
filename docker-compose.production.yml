@@ -14,13 +14,19 @@ services:
   
   # cluster peer0
   ipfs0:
+    build: .
     container_name: ipfs0
-    image: ipfs/go-ipfs:v0.8.0
+    environment:
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME_1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      IPFS_PROFILE: server
     ports:
       - "4001:4001" # ipfs swarm
       - "8080:8080" # ipfs gateway
     volumes:
       - ./data/ipfs0:/data/ipfs
+      - ./plugins:/data/ipfs/plugins
 
   cluster0:
     container_name: cluster0
@@ -43,17 +49,20 @@ services:
     volumes:
       - ./data/cluster0:/data/ipfs-cluster
 
-
   # cluster peer1
-
   ipfs1:
+    build: .
     container_name: ipfs1
-    #image: ipfs/go-ipfs:release
-    image: ipfs/go-ipfs:v0.8.0
+    environment:
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME_2}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      IPFS_PROFILE: server
     ports:
-      - "8081:8080" # ipfs gateway
+      - "8082:8080" # ipfs gateway
     volumes:
       - ./data/ipfs1:/data/ipfs
+      - ./plugins:/data/ipfs/plugins
 
   cluster1:
     container_name: cluster1
