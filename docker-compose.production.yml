@@ -45,6 +45,6 @@ services:
           - "127.0.0.1:9094:9094"
           # The cluster swarm port would need  to be exposed if this container
           # was to connect to cluster peers on other hosts.
-          # - "9096:9096" # Cluster IPFS Proxy endpoint
+          - "9096:9096" # Cluster IPFS Proxy endpoint
     volumes:
       - ./data/cluster0:/data/ipfs-cluster
