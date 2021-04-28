@@ -1,6 +1,6 @@
 version: "3.3"
-services:
 
+services:
   local-ipfs0:
     build: .
     container_name: local-ipfs0
@@ -10,3 +10,4 @@ services:
       - "8080:8080" # ipfs gateway
     volumes:
       - ./data/local-ipfs0:/data/ipfs
+    network_mode: bridge
