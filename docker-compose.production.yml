@@ -37,13 +37,14 @@ services:
       CLUSTER_PEERNAME: cluster0
       CLUSTER_SECRET: ${CLUSTER_SECRET}
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
+      CLUSTER_IPFSPROXY_LISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9095
+      CLUSTER_IPFSPROXY_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
       CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
       CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
       CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
     ports:
       # Open cluster API and IPFS proxy port
       - "127.0.0.1:9094:9094"
-      - "127.0.0.1:9090:9095"
       # The cluster swarm port would need  to be exposed if this container
       # was to connect to cluster peers on other hosts.
       - "9096:9096" # Cluster IPFS Proxy endpoint
