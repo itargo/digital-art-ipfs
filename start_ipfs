@@ -26,7 +26,7 @@ else
       {
 	\"child\": {
 	  \"type\": \"s3ds\",
-	  \"region\": \"us-east-1\",
+	  \"region\": \"ap-northeast-2\",
 	  \"bucket\": \"$AWS_BUCKET_NAME\",
 	  \"rootDirectory\": \"\",
 	  \"accessKey\": \"$AWS_ACCESS_KEY_ID\",
@@ -53,7 +53,7 @@ else
   \"BloomFilterSize\": 0
 }
 "
-  echo "{\"mounts\":[{\"bucket\":\"$AWS_BUCKET_NAME\",\"mountpoint\":\"/blocks\",\"region\":\"us-east-1\",\"rootDirectory\":\"\"},{\"mountpoint\":\"/\",\"path\":\"datastore\",\"type\":\"levelds\"}],\"type\":\"mount\"}" > $repo/datastore_spec
+  echo "{\"mounts\":[{\"bucket\":\"$AWS_BUCKET_NAME\",\"mountpoint\":\"/blocks\",\"region\":\"ap-northeast-2\",\"rootDirectory\":\"\"},{\"mountpoint\":\"/\",\"path\":\"datastore\",\"type\":\"levelds\"}],\"type\":\"mount\"}" > $repo/datastore_spec
 
   fi
 fi
