@@ -1,3 +1,4 @@
+version: "3.3"
 services:
   
   nginx:
@@ -7,20 +8,25 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
-      - "9090:9090"
+      - "9095:9095"
     depends_on:
       - cluster0
-      - cluster1
   
   # cluster peer0
   ipfs0:
+    build: .
     container_name: ipfs0
-    image: ipfs/go-ipfs:v0.8.0
+    environment:
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      IPFS_PROFILE: server
     ports:
       - "4001:4001" # ipfs swarm
       - "8080:8080" # ipfs gateway
     volumes:
       - ./data/ipfs0:/data/ipfs
+      - ./plugins:/data/ipfs/plugins
 
   cluster0:
     container_name: cluster0
@@ -31,43 +37,16 @@ services:
       CLUSTER_PEERNAME: cluster0
       CLUSTER_SECRET: ${CLUSTER_SECRET}
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
+      CLUSTER_IPFSPROXY_LISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9095
+      CLUSTER_IPFSPROXY_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
       CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs0/tcp/5001
       CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
       CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
     ports:
-          # Open API port (allows ipfs-cluster-ctl usage on host)
-          - "127.0.0.1:9094:9094"
-          # The cluster swarm port would need  to be exposed if this container
-          # was to connect to cluster peers on other hosts.
-          # - "9096:9096" # Cluster IPFS Proxy endpoint
+      # Open cluster API and IPFS proxy port
+      - "127.0.0.1:9094:9094"
+      # The cluster swarm port would need  to be exposed if this container
+      # was to connect to cluster peers on other hosts.
+      - "9096:9096" # Cluster IPFS Proxy endpoint
     volumes:
       - ./data/cluster0:/data/ipfs-cluster
-
-
-  # cluster peer1
-
-  ipfs1:
-    container_name: ipfs1
-    #image: ipfs/go-ipfs:release
-    image: ipfs/go-ipfs:v0.8.0
-    ports:
-      - "8081:8080" # ipfs gateway
-    volumes:
-      - ./data/ipfs1:/data/ipfs
-
-  cluster1:
-    container_name: cluster1
-    image: ipfs/ipfs-cluster:v0.12.0
-    depends_on:
-      - ipfs1
-    environment:
-      CLUSTER_PEERNAME: cluster1
-      CLUSTER_SECRET: ${CLUSTER_SECRET}
-      CLUSTER_CRDT_TRUSTEDPEERS: '*'
-      CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs1/tcp/5001
-      CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # Expose API
-      CLUSTER_MONITORPINGINTERVAL: 2s
-    ports:
-          - "127.0.0.1:9095:9094"
-    volumes:
-      - ./data/cluster1:/data/ipfs-cluster

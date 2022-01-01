@@ -1,11 +1,13 @@
 # Digital Art IPFS server
-// local에서 실행
+### 실행 방법
+* local에서 실행
 ```bash
 $ docker-compose up
 ```
-// production에서 실행
-우선 .env에 환경변수들 설정하고
+* production에서 실행
+처음에는 .env 파일 생성 후 환경변수들 설정해야함
 ```bash
+$ cp .env-example .env
 $ source .env
 $ docker-compose -f docker-compose.production.yml up
 ```
@@ -15,8 +17,4 @@ $ docker-compose -f docker-compose.production.yml up
 ```bash
 $ docker-compose down --remove-orphans
 $ docker-compose up 
-```
-* error while creating mount source path '/mnt/mydata': mkdir /mnt/mydata: file exists
-```bash
-$ sudo fusermount -u /mnt/mydata
 ```
